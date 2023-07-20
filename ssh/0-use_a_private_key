@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Using ssh to connect the server using the private key.
+
+ssh-keygen
