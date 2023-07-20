@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# A file for client configuration.
+~/.ssh/school config ubuntu@98.98.98.98
