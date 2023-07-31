@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 # The script to install nginx on a web server.
-#!/bin/bash
-
-# Install Nginx
 sudo apt-get update
 sudo apt-get install -y nginx
-
 # Start Nginx service
 sudo service nginx start
-
 # Create a default Nginx configuration file at /etc/nginx/sites-available/default
 echo "
 server {
@@ -23,6 +18,5 @@ server {
     }
 }
 " | sudo tee /etc/nginx/sites-available/default > /dev/null
-
 # Restart Nginx
 sudo service nginx restart
