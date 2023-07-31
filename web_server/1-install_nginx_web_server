@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-
+# The script to install nginx on a web server.
 # Update package lists and install Nginx
 apt-get update
 apt-get install -y nginx
-
 # Replace the default Nginx configuration with a custom one
 cat > /etc/nginx/sites-available/default << 'EOF'
 server {
@@ -13,6 +12,5 @@ server {
     }
 }
 EOF
-
 # Restart Nginx (without using systemctl)
 service nginx restart
