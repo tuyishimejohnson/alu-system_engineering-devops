@@ -1,32 +1,17 @@
 #!/usr/bin/env bash
 # bash script that installs Nginx & makes configurations to meet the following requirements:
-#   - HTTP responses to contain a custom header (on 'web-01' and 'web-02')
-#   - The name of the custom HTTP header must be 'X-Served-By'
-#   - The value of the custom HTTP header must be the hostname of the server Nginx is running on
+#!/bin/bash
 
-apt-get update
-apt-get install -y nginx
+# Install Nginx
+sudo apt-get update
+sudo apt-get install -y nginx
 
-mkdir -p /var/www/html
-touch /var/www/html/index.html
-echo "Holberton School" > /var/www/html/index.html
-touch /var/www/html/404.html
-echo "Ceci n'est pas une page" > /var/www/html/404.html
+# Get the hostname of the server
+server_hostname=$(hostname)
 
-printf %s "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    add_header X-Served-By $HOSTNAME;
-    root   /var/www/html;
-    index  index.html index.htm;
-    location /redirect_me {
-        return 301 http://youtube.com/;
-    }
-    error_page 404 /404.html;
-    location /404 {
-      root /var/www/html;
-      internal;
-    }
-}" > /etc/nginx/sites-available/default
+# Configure Nginx to add custom HTTP response header
+custom_header="add_header X-Served-By $server_hostname;"
+sudo sed -i "/server_name _;/a \ \ \ \ $custom_header" /etc/nginx/sites-available/default
 
-service nginx restart
+# Reload Nginx to apply the changes
+sudo service nginx reload
