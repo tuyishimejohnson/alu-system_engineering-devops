@@ -1,24 +1,13 @@
 #!/usr/bin/env bash
-# Install necessary tools
-sudo apt update
-sudo apt install nginx net-tools
-
-# Check if Nginx is running and listening on port 80
-sudo systemctl status nginx
-sudo netstat -tuln | grep 80
-
-# Update Nginx configuration
-echo "server {
-    listen 80;
-    listen [::]:80 ipv6only=off;
-    server_name _;
-
-    # Your server configuration goes here
-}" | sudo tee /etc/nginx/conf.d/my_custom_config.conf
-
-# Test and restart Nginx
-sudo nginx -t
-sudo systemctl restart nginx
-
-# Check if Nginx is now listening on port 80 of all active IPv4 IPs
-sudo netstat -tuln | grep 80
+#Script to run nginx on docker container
+sudo apt-get update -y
+sudo apt-get install nginx -y
+first="listen\s[0-9]*?\sdefault_server"
+second="listen 80 default_server"
+start="listen\s\[::\]:[0-9]*?\sdefault_server"
+end="listen [::]:80 default_server"
+sudo sed -ri "s/$first/$second/" /etc/nginx/sites-available/default
+sudo sed -ri "s/$start/$end/" /etc/nginx/sites-available/default
+sudo sed -ri "s/$first/$second/" /etc/nginx/sites-enabled/default
+sudo sed -ri "s/$start/$end/" /etc/nginx/sites-enabled/default
+sudo service nginx restart
